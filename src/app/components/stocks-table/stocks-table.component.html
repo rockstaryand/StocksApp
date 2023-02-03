@@ -1,0 +1,98 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="form-group">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchText"
+        placeholder="Search stocks..."
+      />
+    </div>
+
+    <div class="col-md-12 mt-5 mb-5">
+      <h5>Stocks</h5>
+      <ngx-datatable
+        class="elevated-table"
+        [rows]="stocks | search : searchText"
+        style="height: 500px"
+        [columns]="columns"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [limit]="10"
+        [scrollbarV]="true"
+        [sorts]="[{ prop: 'stock', dir: 'desc' }]"
+        [selected]="selected"
+        [reorderable]="reorderable"
+        [selectionType]="SelectionType.single"
+        (select)="selectRow($event)"
+      >
+        <ngx-datatable-column
+          name="Stock Name"
+          prop="stock"
+          [style.border-right]="'1px solid #ddd'"
+          [sortable]="true"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Industry"
+          prop="industry"
+          [style.border-right]="'1px solid #ddd'"
+          [sortable]="true"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Sector"
+          prop="sector"
+          [style.border-right]="'1px solid #ddd'"
+          [sortable]="true"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Currency Code"
+          prop="currency_code"
+          [sortable]="true"
+        ></ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+
+    <h5 *ngIf="selected && selected[0]?.id">
+      Selected Stock: {{ selected[0].stock }}
+    </h5>
+
+    <div class="col-md-12">
+      <ngx-datatable
+        class="elevated-table"
+        [rows]="stockValues"
+        style="height: 500px"
+        [columns]="columnsStockValues"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [scrollbarV]="true"
+        [reorderable]="reorderable"
+        [sorts]="[{ prop: 'date', dir: 'desc' }]"
+      >
+        <ngx-datatable-column
+          name="Stock"
+          prop="stock"
+          [sortable]="true"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Date"
+          prop="date"
+          [sortable]="true"
+        ></ngx-datatable-column>
+        <ngx-datatable-column
+          name="Value"
+          prop="value"
+          [sortable]="true"
+        ></ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+    <div class="d-flex justify-content-end align-items-center">
+      <button
+        [disabled]="stockValues.length === 0"
+        (click)="exportAsJson()"
+        class="btn btn-sm btn-secondary rounded-pill ml-3"
+      >
+        Export as JSON
+      </button>
+    </div>
+  </div>
+</div>
